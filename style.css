@@ -1,0 +1,99 @@
+:root {
+    --day: #6ad5;  /*rgba(184, 192, 72, 0.4); or #6ad6*/
+    --night:  #75d5;/*rgba(62, 76, 201, 0.4); or #75d6*/ 
+}
+
+.all {
+    background: url('img/bg.jpg') rgba(0, 0, 0, 0.9);
+    background-size: cover;
+    height: 100%;
+}
+
+/* Main span for city name */
+
+.city-name {
+    padding: .8em 1.4em;
+    font-size: 2.2em;
+    font-weight: 650;
+    letter-spacing: 130%;
+} 
+
+
+/* Long-term weather forecast box */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: [A] 1fr [B] 1fr [C] 1fr [D] 1fr [E] 1fr [F] 1fr [G] 1fr [H] 1fr [I] 1fr [J] 1fr;
+    grid-template-rows: [date]4fr [vis]20fr [temp]4fr; 
+    column-gap: 0;
+}
+
+.grid-container .date {
+    border: .2em solid #aaaa;
+    font-size: 1.2em;
+    text-align: center;
+    /*background: rgba(255,255,255, 0.1);*/
+    background: var(--day);
+    border-top: .3em solid var(--day);
+    border-left: .3em solid var(--day);
+    box-shadow: .3em .3em .5em rgba(256, 256, 256, 0.5);
+}
+
+/*.grid-container .date:nth-child(2n) {
+    background: var(--night);
+    border-top: .3em solid var(--night);
+    border-left: .3em solid var(--night);
+}
+*/
+
+.grid-container .visual {
+    background: rgba(255,255,255, 0.3);
+    padding-bottom: .4em;
+
+}
+
+.grid-container .visual:nth-child(2n) {
+    border-right: 0.32em solid #2222;
+}
+
+.grid-container .visual div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: .7em;
+    margin: 0 .8em;
+    border-radius: 4.2px;
+    /*background:  rgba(125, 35, 123, 0.6);*/
+}
+
+.grid-container .visual div img{
+    font-size: 3.6em;
+}
+
+.grid-container .visual div img:hover {
+    border-radius: 6px;
+    background-image: radial-gradient(rgba(172, 246, 227, 0.3), rgba(172, 246, 227, 0.3));
+}
+
+.grid-container .temper {
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    font-size: 1.5em;
+    max-width: 3.5em;
+    padding: .4em .8em;
+    border: .1em solid #000;
+    background: rgba(255,255,255, 0.1);
+    border-top: .2em solid rgba(255, 255, 255, 0.5);
+    border-left: .2em solid rgba(255, 255, 255, 0.5);
+    box-shadow: .3em .3em .5em rgba(0, 0, 0, 0.5);
+
+}
+
+/*
+.grid-container .icon {
+   display: flex;
+   align-self: center;
+   justify-self: center; 
+}
+*/
