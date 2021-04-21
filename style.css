@@ -52,9 +52,11 @@
 
 }
 
+/*
 .grid-container .visual:nth-child(2n) {
     border-right: 0.32em solid #2222;
 }
+*/
 
 .grid-container .visual div {
     display: flex;
@@ -97,3 +99,5 @@
    justify-self: center; 
 }
 */
+
+/* HERE COMES THE DETAIL SECTION */
