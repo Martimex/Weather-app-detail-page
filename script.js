@@ -90,7 +90,7 @@ function last() {
                //console.log(icon);
                 //icon.setAttribute('src', iconurl);
                 
-                setBaseVisual(iter, visual, num, baseNum, value);
+                (iter === 0)? setBaseVisual(iter, visual, num, baseNum, value) : '';  //work on this function Please !!!
 
                 // Append img to upper div
 
@@ -111,9 +111,153 @@ function last() {
     //separateDays(fullDate);
 }
 
+function firstDetailed() {  // create some HTML blocks
+
+    const section = document.querySelector('.detailed-info');
+    //const detailbox = section.querySelector('.detail-box');
+
+    for(let y=0; y<limit; y++) { // zamiast 2 ma być: limit
+
+        //let detailbox = document.createElement('div'); // Na tym kończymy, ale ten blok trzeba poprawić...
+        //detailbox.classList.add('detail-box');           // Posprawdzaj, ile tych iteracji jest w pętlach i logicznie je pozmieniaj
+        //section.appendChild(detailbox);
+
+        let detailbox = document.querySelector('.detailed-info .detail-box');
+
+        let nextdate = document.createElement('div');
+        nextdate.classList.add('nextdate');
+        detailbox.appendChild(nextdate);
+    
+
+
+        let weather = document.createElement('div');
+        weather.classList.add('weather');
+        detailbox.appendChild(weather);
+
+            let img = document.createElement('img');
+            img.classList.add('weather-icon');
+
+            weather.appendChild(img);
+
+
+
+        let tempbox = document.createElement('div');
+        tempbox.classList.add('temp-box');
+        detailbox.appendChild(tempbox);
+
+            let temp = document.createElement('div');
+            temp.classList.add('temp');
+            tempbox.appendChild(temp);
+
+            let tempdesc = document.createElement('div');
+            tempdesc.classList.add('temp-desc');
+            tempbox.appendChild(tempdesc);
+    
+
+
+        let humidity = document.createElement('div');
+        humidity.classList.add('humidity');
+        detailbox.appendChild(humidity);
+
+
+
+        let wind = document.createElement('div');
+        wind.classList.add('wind');
+        detailbox.appendChild(wind);
+
+            let speed = document.createElement('div');
+            speed.classList.add('speed');
+            wind.appendChild(speed);
+
+            let degree = document.createElement('div');
+            degree.classList.add('degree');
+            wind.appendChild(degree);
+
+
+
+        let pressure = document.createElement('div');
+        pressure.classList.add('pressure');
+        detailbox.appendChild(pressure);
+    }
+
+}
+
+function lastDetailed() {
+
+    for(let iter=0; iter<limit; iter++) { // iter<=0 bo na razie testujemy 1 blok
+
+        fetch(url)
+            .then(res => res.json())
+            .then((details) => {
+
+                let fullDate = details.list[(iter*4)+1].dt_txt;
+                //console.log('fullDate: '+fullDate);
+
+                let iconCode = details.list[(iter*4)+1].weather[0].icon;
+                let iconurl = `http://openweathermap.org/img/w/${iconCode}.png`; // this one will be appended to img tag
+                //console.log(iconurl);
+
+                let temp = Math.floor(details.list[(iter*4)+1].main.temp)+'°C';  // actual temperature
+                //console.log(`%c ${temp}`, 'color: black; background: #ea4;');
+
+                let desc = details.list[(iter*4)+1].weather[0].description;
+                //console.log(`%c ${desc}`, 'color: black; background: lightblue;');
+
+                let humidity = details.list[(iter*4)+1].main.humidity;
+                //console.log(humidity);
+
+                let wind_speed = details.list[(iter*4)+1].wind.speed;
+                //console.log(wind_speed);
+
+                let wind_degree = details.list[(iter*4)+1].wind.deg;
+                //console.log(wind_degree);
+
+                let pressure = details.list[(iter*4)+1].main.pressure;
+                //console.log(pressure);
+
+               //let rainfall = details.list[(iter*4)+1]
+               // console.log(rainfall);
+
+                let box = document.querySelector(`.detail-box`); // To be continued...
+                console.log(box);
+                let nextdate = box.querySelector(`.nextdate:nth-of-type(${(iter*6)+1})`); // iter * how much child divs do we have (on basic dimension) + which is the order of an element
+                let YMD = fullDate.substring(0, 10);
+                let hour = fullDate.substring(11, 13);
+
+                nextdate.textContent = YMD;
+                let image = box.querySelector(`.weather:nth-of-type(${(iter*6)+2}) .weather-icon`);
+                image.setAttribute('src', `${iconurl}`);
+                
+                let temperature = box.querySelector(`.temp-box:nth-of-type(${(iter*6)+3}) .temp`);
+                temperature.textContent = temp;
+                let description = box.querySelector(`.temp-box:nth-of-type(${(iter*6)+3}) .temp-desc`);
+                description.textContent = desc;
+                let hum = box.querySelector(`.humidity:nth-of-type(${(iter*6)+4})`);
+                hum.textContent = humidity;
+                let wspeed = box.querySelector(`.wind:nth-of-type(${(iter*6)+5}) .speed`);
+                wspeed.textContent = wind_speed;
+                let wdegree = box.querySelector(`.wind:nth-of-type(${(iter*6)+5}) .degree`);
+                wdegree.textContent = wind_degree;
+                let pressu = box.querySelector(`.pressure:nth-of-type(${(iter*6)+6})`);
+                pressu.textContent = pressure;
+
+               if(iter === 0) {
+                    let wind = box.querySelector('.wind');
+                    let imagediv = box.querySelector('.weather');
+                    let tempbox = box.querySelector('.temp-box');
+
+                    let divArr = [nextdate, wind, imagediv, tempbox, hum, pressu];
+                    colorGrid(hour, divArr);  
+               }  
+ 
+            })
+    }
+}
+
 first();
 last();
-
+firstDetailed();
+lastDetailed();
 
 function setBaseVisual(iter, visual, num, baseNum, value) {
 
@@ -122,34 +266,70 @@ function setBaseVisual(iter, visual, num, baseNum, value) {
     // num = temperatura dla bloczku, który teraz omawiamy
     // baseNum = temperatura bloczku 1, który zawsze wynosi 21 divów - pozostała ilość bloczków to już różnica temperatur
 
-    if(iter == 0) {
-        (isFirstBlockDay)?
-            visual.querySelectorAll(`div:nth-last-child(-n+21)`) // all divs, but we actually need 21
-            .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`}) // light
-        :
-            visual.querySelectorAll(`div:nth-last-child(-n+21)`) // all divs, but we actually need 21
-            .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`}) // dark
-    }
+    console.log('baseNum:   ' + baseNum); // to wartość temperatury dla pierwszego visual !!!
+    console.log('num:   ' +num); // to jest wartość temperatury dla omawianego visual !!!
 
+    if(iter == 0) {
+
+        let allVisuals = document.querySelectorAll(`.grid-container .visual:not(:nth-of-type(1))`); //-n+21
+        console.log(allVisuals);
+
+        if(isFirstBlockDay) {
+
+            visual.querySelectorAll(`div:nth-last-child(-n+21)`).forEach(div => { 
+                div.style.background = `linear-gradient(135deg, #56cd, #6add)`; // light
+            })
+
+            allVisuals.forEach((visual, index) => {
+                if(index % 2) {
+                    visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) // all divs, but we actually need 21
+                    .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`}) // light
+                }
+                else {
+                    visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) // all divs, but we actually need 21
+                    .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`}) // dark 
+                }
+            })
+        }
+
+        else{
+
+            visual.querySelectorAll(`div:nth-last-child(-n+21)`).forEach(div => {
+                div.style.background = `linear-gradient(135deg, #75dd, #349d)`;
+            })
+
+            allVisuals.forEach((visual, index) => {
+                if(index % 2) {
+                    visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) // all divs, but we actually need 21
+                    .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`}) // dark 
+                }
+                else {
+                    visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) // all divs, but we actually need 21
+                    .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`}) // light
+                }
+            })
+        }
+    }
+ /*
     else {
         //visual.querySelectorAll(`div`).forEach(div => {div.style.background = `linear-gradient(to bottom, rgba(255, 255, 255, 0.1))`})
         (isFirstBlockDay)? 
 
-            (!(iter%2))?
-            visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`)
-            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`})
-            :
+            (iter%2)?
             visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) 
-            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`})   
+            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`})   // dark
+            :
+            visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`)
+            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`})  // light
 
         :
             (iter%2)?
-            visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) 
-            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`})
-            :
             visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`)
-            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`})   
-    }
+            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`})  // light
+            :  
+            visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) 
+            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`})  //dark
+    } */
 }
 
 function separateDays(firstDate) {
@@ -159,13 +339,13 @@ function separateDays(firstDate) {
     console.log('Day:  ',day, '  Hour:  ',hour);
 
     if(hour >= 12) {
-        console.log('it is');
+        //console.log('it is');
         document.querySelectorAll(`.grid-container .visual:nth-child(odd)`).forEach(visual => 
             visual.style.cssText = `border-right: 0.32em solid #2222;`);
     }
 
     else {
-        console.log('nope');
+        //console.log('nope');
         document.querySelectorAll(`.grid-container .visual:nth-child(even)`).forEach(visual =>
             visual.style = `border-right: 0.32em solid #2222;`);
     }
@@ -189,6 +369,9 @@ function dayOrNight(firstDate, iter) {
         document.querySelectorAll(`.grid-container .date:nth-child(even)`).forEach(el => //tak
         el.style.cssText = `background: #75d5; border-top: .3em solid #75d5; border-left: .3em solid #75d5; `);
         isFirstBlockDay = true;
+        //
+       // document.querySelectorAll(`.detailed-info .detail-box:nth-child(even) .nextdate, .nextdate ~ div`).forEach(gridItem => // yes
+        //gridItem.style.cssText = `background: #75d5; border-top: .3em solid #75d5;`); 
         return true;
     } 
 
@@ -196,7 +379,69 @@ function dayOrNight(firstDate, iter) {
         document.querySelectorAll(`.grid-container .date:nth-child(odd)`).forEach(el => //nie
         el.style.cssText = `background: #75d5; border-top: .3em solid #75d5; border-left: .3em solid #75d5;`);
         isFirstBlockDay = false;
+        //
+        //document.querySelectorAll(`.detailed-info .detail-box:nth-child(odd) .nextdate, .nextdate ~ div`).forEach(gridItem => //yes 
+        //gridItem.style.cssText = `background: #75d5; border-top: .3em solid #75d5;`);
         return false;
     } 
         
+}
+
+function colorGrid(hour, divArr) {
+    
+    console.log(`%c ${hour}`, `background: green;`);
+    
+    let num = parseInt(hour);
+
+    console.log('num  :  ' + num);
+    console.log(typeof(num));
+    
+    let textOdd = '';
+    let textEven = '';
+    let iter = 0;
+
+    if(6<num && num<21) {
+        textOdd = `background: linear-gradient(135deg, #56cb, #6adb); border: .3em solid #6ad7;`;
+        textEven = `background: linear-gradient(135deg, #75db, #349b); border: .3em solid #75d7;`;
+    }
+    else {
+        textOdd = `background: linear-gradient(135deg, #75db, #349b); border: .3em solid #75d7;`; 
+        textEven = `background: linear-gradient(135deg, #56cb, #6adb); border: .3em solid #6ad7;`;
+    }
+
+    let box = document.querySelector('.detail-box');
+    box.querySelectorAll('.nextdate').forEach(el => {
+        (iter%2)? el.style.cssText = textEven : el.style.cssText = textOdd;  // if iter%2 === 0 we receive: FALSE
+        iter++;
+    })
+    box.querySelectorAll('.weather').forEach(el => {
+        (iter%2)? el.style.cssText = textEven : el.style.cssText = textOdd;
+        iter++;
+    })
+    box.querySelectorAll('.temp-box').forEach(el => {
+        (iter%2)? el.style.cssText = textEven : el.style.cssText = textOdd;
+        iter++;
+    })
+    box.querySelectorAll('.humidity').forEach(el => {
+        (iter%2)? el.style.cssText = textEven : el.style.cssText = textOdd;
+        iter++;
+    })
+    box.querySelectorAll('.wind').forEach(el => {
+        (iter%2)? el.style.cssText = textEven : el.style.cssText = textOdd;
+        iter++;
+    })
+
+    box.querySelectorAll('.pressure').forEach(el => {
+        (iter%2)? el.style.cssText = textEven : el.style.cssText = textOdd;
+        iter++;
+    })
+    
+}
+
+/* STUFF FOR DETAILED WEATHER */
+
+function setBg(hour) {
+    console.log(hour);
+
+
 }

@@ -101,3 +101,33 @@
 */
 
 /* HERE COMES THE DETAIL SECTION */
+
+.detailed-title {
+    font-size: 1.4rem;
+    padding: .8em;
+    font-weight: 600;
+}
+
+.detailed-info .detail-box {
+    display: grid;
+    padding:  0 4.2em;
+    grid-template-columns: repeat(6, 1fr); /* Może być 7, ale tylko gdy ogarnę jak obsłużyć mechanizm błędu dla deszczu */
+    justify-content: center;
+    /*border: .5em solid #333;*/
+    row-gap: 2em;
+    font-size: 1.25em;
+    text-align: center;
+
+}
+
+.detailed-info .detail-box .nextdate, .nextdate ~ div {
+    background: var(--day);
+    border: .2em solid var(--day);
+    font-size: 1.4rem;
+    padding: .5em;
+
+}
+
+/*.detailed-info .detail-box .nextdate {
+    
+}*/
