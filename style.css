@@ -100,34 +100,85 @@
 }
 */
 
+/* SO HERE WE HAVE THE LEGEND ITSELF  => AND WE WANT TO MAKE IT STICKY */
+.detailed-info .legend-box {
+
+   column-gap: .5em;
+   overflow: hidden;
+   visibility: visible;
+}
+
+.sticky {
+    position: fixed;
+    top:0;
+}
+
+
+.detailed-info .legend-box .legend-1 {
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: .8em;
+    padding: .4em;
+    border: .1rem solid #000;
+    background: rgba(255,255,255, 0.1);
+    border-top: .2rem solid rgba(255, 255, 255, 0.5);
+    border-left: .2rem solid rgba(255, 255, 255, 0.5);
+    box-shadow: .5rem .5rem .8rem rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+    font-style: italic;
+    color:#000000;
+    letter-spacing: .6px;
+    border-radius:  12px;
+    width: 80%;
+}
+
+
 /* HERE COMES THE DETAIL SECTION */
 
 .detailed-title {
-    font-size: 1.4rem;
-    padding: .8em;
+    font-size: 2rem;
+    margin: 1.8em;
     font-weight: 600;
 }
 
-.detailed-info .detail-box {
+.detailed-info .detail-box, .legend-box {
     display: grid;
     padding:  0 4.2em;
     grid-template-columns: repeat(6, 1fr); /* Może być 7, ale tylko gdy ogarnę jak obsłużyć mechanizm błędu dla deszczu */
     justify-content: center;
     /*border: .5em solid #333;*/
-    row-gap: 2em;
+    /*column-gap: .5em; */
+    row-gap: 1.3em;
     font-size: 1.25em;
     text-align: center;
 
 }
 
 .detailed-info .detail-box .nextdate, .nextdate ~ div {
-    background: var(--day);
-    border: .2em solid var(--day);
+   /* background: var(--day); */
+    /*border: .2em solid var(--day); */
     font-size: 1.4rem;
     padding: .5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: 15px;
 
 }
 
-/*.detailed-info .detail-box .nextdate {
-    
-}*/
+.detailed-info .detail-box .nextdate ~ div div {
+    width:100%;
+}
+
+/* LASTLY, FOOTER*/
+
+.footer{
+    text-align: center;
+    margin-top: 3rem;
+    padding: .7rem;
+    font-size: 1.4em;
+    background: #88888844;
+}

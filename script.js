@@ -89,8 +89,16 @@ function last() {
                //let icon = document.querySelector(`.grid-container .icon:nth-of-type(${iter+1})`); 
                //console.log(icon);
                 //icon.setAttribute('src', iconurl);
+
                 
-                (iter === 0)? setBaseVisual(iter, visual, num, baseNum, value) : '';  //work on this function Please !!!
+                if(iter === 0) { //work on this function Please !!!
+                    let tempArr = [];
+                    for(let r=1; r<limit; r++) {
+                       let temp = Math.floor(data.list[(r*4)+1].main.temp);
+                       tempArr.push(temp);
+                    }
+                    setBaseVisual(iter, visual, num, baseNum, value, tempArr);
+                }  
 
                 // Append img to upper div
 
@@ -203,16 +211,16 @@ function lastDetailed() {
                 let desc = details.list[(iter*4)+1].weather[0].description;
                 //console.log(`%c ${desc}`, 'color: black; background: lightblue;');
 
-                let humidity = details.list[(iter*4)+1].main.humidity;
+                let humidity = details.list[(iter*4)+1].main.humidity+'%';
                 //console.log(humidity);
 
-                let wind_speed = details.list[(iter*4)+1].wind.speed;
+                let wind_speed = details.list[(iter*4)+1].wind.speed+' m/s';
                 //console.log(wind_speed);
 
-                let wind_degree = details.list[(iter*4)+1].wind.deg;
+                let wind_degree = details.list[(iter*4)+1].wind.deg+'°';
                 //console.log(wind_degree);
 
-                let pressure = details.list[(iter*4)+1].main.pressure;
+                let pressure = details.list[(iter*4)+1].main.pressure+' hPa';
                 //console.log(pressure);
 
                //let rainfall = details.list[(iter*4)+1]
@@ -259,7 +267,7 @@ last();
 firstDetailed();
 lastDetailed();
 
-function setBaseVisual(iter, visual, num, baseNum, value) {
+function setBaseVisual(iter, visual, num, baseNum, value, tempArr) {
 
     // iter = która to iteracja
     // visual = bloczek grid, na którym wykonujemy operację
@@ -268,6 +276,7 @@ function setBaseVisual(iter, visual, num, baseNum, value) {
 
     console.log('baseNum:   ' + baseNum); // to wartość temperatury dla pierwszego visual !!!
     console.log('num:   ' +num); // to jest wartość temperatury dla omawianego visual !!!
+    console.log(tempArr); 
 
     if(iter == 0) {
 
@@ -281,13 +290,17 @@ function setBaseVisual(iter, visual, num, baseNum, value) {
             })
 
             allVisuals.forEach((visual, index) => {
-                if(index % 2) {
-                    visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) // all divs, but we actually need 21
-                    .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`}) // light
-                }
-                else {
-                    visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) // all divs, but we actually need 21
-                    .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`}) // dark 
+                for(let b=0; b<tempArr.length; b++) {
+
+                    if(index % 2) {
+                        visual.querySelectorAll(`div:nth-last-child(-n+${(tempArr[index] - baseNum) + 21})`) // all divs, but we actually need 21
+                        .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`}) // light
+                    }
+                    else {
+                        visual.querySelectorAll(`div:nth-last-child(-n+${(tempArr[index] - baseNum) + 21})`) // all divs, but we actually need 21
+                        .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`}) // dark 
+                    }
+                   
                 }
             })
         }
@@ -299,37 +312,22 @@ function setBaseVisual(iter, visual, num, baseNum, value) {
             })
 
             allVisuals.forEach((visual, index) => {
-                if(index % 2) {
-                    visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) // all divs, but we actually need 21
-                    .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`}) // dark 
+                for(let b=0; b<tempArr.length; b++) {
+
+                    if(index % 2) {
+                        visual.querySelectorAll(`div:nth-last-child(-n+${(tempArr[index] - baseNum) + 21})`) // all divs, but we actually need 21
+                        .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`}) // dark 
+                    }
+                    else {
+                        visual.querySelectorAll(`div:nth-last-child(-n+${(tempArr[index] - baseNum) + 21})`) // all divs, but we actually need 21
+                        .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`}) // light
+                    }
                 }
-                else {
-                    visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) // all divs, but we actually need 21
-                    .forEach(elem =>  {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`}) // light
-                }
+                
             })
         }
     }
- /*
-    else {
-        //visual.querySelectorAll(`div`).forEach(div => {div.style.background = `linear-gradient(to bottom, rgba(255, 255, 255, 0.1))`})
-        (isFirstBlockDay)? 
 
-            (iter%2)?
-            visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) 
-            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`})   // dark
-            :
-            visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`)
-            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`})  // light
-
-        :
-            (iter%2)?
-            visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`)
-            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #56cd, #6add)`})  // light
-            :  
-            visual.querySelectorAll(`div:nth-last-child(-n+${(num - baseNum) + 21})`) 
-            .forEach(elem => {elem.style.background = `linear-gradient(135deg, #75dd, #349d)`})  //dark
-    } */
 }
 
 function separateDays(firstDate) {
@@ -398,20 +396,34 @@ function colorGrid(hour, divArr) {
     
     let textOdd = '';
     let textEven = '';
+    let txtOd = '';
+    let txtEv = '';
     let iter = 0;
 
     if(6<num && num<21) {
         textOdd = `background: linear-gradient(135deg, #56cb, #6adb); border: .3em solid #6ad7;`;
         textEven = `background: linear-gradient(135deg, #75db, #349b); border: .3em solid #75d7;`;
+        txtOd = 'Day';
+        txtEv = 'Night';
     }
     else {
         textOdd = `background: linear-gradient(135deg, #75db, #349b); border: .3em solid #75d7;`; 
         textEven = `background: linear-gradient(135deg, #56cb, #6adb); border: .3em solid #6ad7;`;
+        txtOd = 'Night';
+        txtEv = 'Day';
     }
 
     let box = document.querySelector('.detail-box');
     box.querySelectorAll('.nextdate').forEach(el => {
-        (iter%2)? el.style.cssText = textEven : el.style.cssText = textOdd;  // if iter%2 === 0 we receive: FALSE
+        
+        if(iter%2) {
+            el.style.cssText = textEven;
+            el.innerText += `\n${txtEv}`;
+        } 
+        else {
+            el.style.cssText = textOdd;
+            el.innerText += `\n${txtOd}`;
+        }   // if iter%2 === 0 we receive: FALSE
         iter++;
     })
     box.querySelectorAll('.weather').forEach(el => {
@@ -443,5 +455,35 @@ function colorGrid(hour, divArr) {
 function setBg(hour) {
     console.log(hour);
 
+
+}
+
+/* STICKY CRAP WHEN YOU SCROLL WAAAAY TO MUCH */
+
+const legendGrid = document.querySelector(`.legend-box`);
+const handler = document.querySelector(`#catch`);
+const catched = document.querySelector(`#catched`);
+
+window.onscroll = function() {keepItTop(legendGrid, handler, catched);}
+
+function keepItTop (legendGrid) {
+
+    //let sticky = legendGrid.offsetTop;
+    //let catchy = catched.offsetTop;  ===== 'linear-gradient(135deg, #99d1f0, #99b0f0)
+
+    let hand = handler.offsetTop;
+    let sum = legendGrid.offsetHeight;
+
+    if(window.pageYOffset > hand) {  
+        legendGrid.classList.add('sticky');
+        catched.style = `height: ${sum}px;`;
+        //legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = 'background-image: linear-gradient(to top, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%);');
+        legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = `background: #aaa;`);
+    }
+    else { 
+        legendGrid.classList.remove('sticky');
+        catched.style = `height: 0;`;
+        legendGrid.querySelectorAll('.legend-1').forEach(div => div.style= 'background: none;');
+    }
 
 }
