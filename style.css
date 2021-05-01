@@ -7,6 +7,7 @@
     background: url('img/bg.jpg') rgba(0, 0, 0, 0.9);
     background-size: cover;
     height: 100%;
+    overflow-x: hidden;
 }
 
 /* Main span for city name */

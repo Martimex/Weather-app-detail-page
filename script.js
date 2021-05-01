@@ -463,6 +463,7 @@ function setBg(hour) {
 const legendGrid = document.querySelector(`.legend-box`);
 const handler = document.querySelector(`#catch`);
 const catched = document.querySelector(`#catched`);
+let iterAnime = 0;
 
 window.onscroll = function() {keepItTop(legendGrid, handler, catched);}
 
@@ -470,7 +471,6 @@ function keepItTop (legendGrid) {
 
     //let sticky = legendGrid.offsetTop;
     //let catchy = catched.offsetTop;  ===== 'linear-gradient(135deg, #99d1f0, #99b0f0)
-
     let hand = handler.offsetTop;
     let sum = legendGrid.offsetHeight;
 
@@ -479,8 +479,27 @@ function keepItTop (legendGrid) {
         catched.style = `height: ${sum}px;`;
         //legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = 'background-image: linear-gradient(to top, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%);');
         legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = `background: #aaa;`);
+        console.log(iterAnime);
+        if(iterAnime <= 0) {
+            anime({
+                targets: legendGrid,
+                scale: [0.7, 1],
+                duration: 1500,
+                
+            })
+        }
+        iterAnime = 1;
     }
     else { 
+        if(iterAnime > 0) {
+            anime({
+                targets: `${legendGrid} > .legend-1`,
+                color: `pink`,
+                duration: 3000,
+            })
+            iterAnime = 0;
+        }
+        
         legendGrid.classList.remove('sticky');
         catched.style = `height: 0;`;
         legendGrid.querySelectorAll('.legend-1').forEach(div => div.style= 'background: none;');
