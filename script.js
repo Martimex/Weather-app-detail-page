@@ -227,7 +227,7 @@ function lastDetailed() {
                // console.log(rainfall);
 
                 let box = document.querySelector(`.detail-box`); // To be continued...
-                console.log(box);
+                //console.log(box);
                 let nextdate = box.querySelector(`.nextdate:nth-of-type(${(iter*6)+1})`); // iter * how much child divs do we have (on basic dimension) + which is the order of an element
                 let YMD = fullDate.substring(0, 10);
                 let hour = fullDate.substring(11, 13);
@@ -465,7 +465,10 @@ const handler = document.querySelector(`#catch`);
 const catched = document.querySelector(`#catched`);
 let iterAnime = 0;
 
-window.onscroll = function() {keepItTop(legendGrid, handler, catched);}
+const footer = document.querySelector(`.footer`);
+let once = 0;
+
+window.onscroll = function() {keepItTop(legendGrid, handler, catched); footerAnimate(footer);}
 
 function keepItTop (legendGrid) {
 
@@ -478,25 +481,25 @@ function keepItTop (legendGrid) {
         legendGrid.classList.add('sticky');
         catched.style = `height: ${sum}px;`;
         //legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = 'background-image: linear-gradient(to top, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%);');
-        legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = `background: #aaa;`);
+        legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = `background: #4ad;`);
         console.log(iterAnime);
         if(iterAnime <= 0) {
             anime({
                 targets: legendGrid,
                 scale: [0.7, 1],
                 duration: 1500,
-                
+            })
+            anime({
+                targets: `.legend-1`,
+                duration: 3000,
+                backgroundColor: '#4ad',
             })
         }
         iterAnime = 1;
     }
     else { 
         if(iterAnime > 0) {
-            anime({
-                targets: `${legendGrid} > .legend-1`,
-                color: `pink`,
-                duration: 3000,
-            })
+
             iterAnime = 0;
         }
         
@@ -505,4 +508,22 @@ function keepItTop (legendGrid) {
         legendGrid.querySelectorAll('.legend-1').forEach(div => div.style= 'background: none;');
     }
 
+}
+
+function footerAnimate(footer) {
+
+    //let offset = footer.offsetTop;
+    let windowH = window.innerHeight;
+    //console.log(windowH);
+    let positionFromTop = footer.getBoundingClientRect().top;
+
+        if(positionFromTop - windowH <= 0 && once < 1)  {
+                anime({
+                    targets: footer,
+                    duration: 3000,
+                    opacity: [0, 1],
+                    translateX: [-600, 0],
+                })
+                once++;
+        }    
 }
