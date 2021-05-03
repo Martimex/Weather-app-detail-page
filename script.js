@@ -111,6 +111,44 @@ function last() {
             })
     }
 
+    const mediaQueryList = window.matchMedia('(max-width: 900px)');  // condition for mobile devices 
+
+    if(mediaQueryList.matches) {
+
+        // Get every textContent of legend box in order to shorten unnecessary text
+        document.querySelectorAll(`.legend-box .legend-1`).forEach(box => {
+            let limit = 5; //
+            if(box.textContent.length > limit) {
+                let text = box.textContent;
+                let non = text.substr(0, limit);
+                box.textContent = non + '...';
+            }
+        })
+
+        let prevBtn = document.createElement('button');
+        prevBtn.setAttribute('class', 'switch-btn-l');
+        prevBtn.innerText = 'Back';
+
+        let nextBtn = document.createElement('button');
+        nextBtn.setAttribute('class', 'switch-btn-r');
+        nextBtn.innerText = 'Next';
+
+
+        let gridCont = document.querySelector('.grid-container');
+        let parentElem = gridCont.parentNode;
+
+        parentElem.insertBefore(prevBtn, gridCont);
+
+        parentElem.insertBefore(nextBtn, gridCont);
+
+        document.querySelector('.switch-btn-l');
+        let secBtn = document.querySelector('.switch-btn-r');
+        secBtn.addEventListener('touchend', (e) => {
+            //console.log('Kacperek kliknął');
+            //let secondHalfQuery = document.querySelectorAll('')
+        })
+    }
+
     // Display queried city name on the upper span
 
     let citySpan = document.querySelector('.city-name');
@@ -214,7 +252,8 @@ function lastDetailed() {
                 let humidity = details.list[(iter*4)+1].main.humidity+'%';
                 //console.log(humidity);
 
-                let wind_speed = details.list[(iter*4)+1].wind.speed+' m/s';
+                let wind_speed = details.list[(iter*4)+1].wind.speed+'m/s';
+
                 //console.log(wind_speed);
 
                 let wind_degree = details.list[(iter*4)+1].wind.deg+'°';
@@ -482,7 +521,7 @@ function keepItTop (legendGrid) {
         catched.style = `height: ${sum}px;`;
         //legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = 'background-image: linear-gradient(to top, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%);');
         legendGrid.querySelectorAll('.legend-1').forEach(div => div.style = `background: #4ad;`);
-        console.log(iterAnime);
+        //console.log(iterAnime);
         if(iterAnime <= 0) {
             anime({
                 targets: legendGrid,
