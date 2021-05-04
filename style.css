@@ -206,10 +206,15 @@
         width: 7em;
         height: 3em;
         position: relative; left: 2%;
+        /* Button styling */
+        border-radius: 7px;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        background-color: rgb(219, 172, 84);
     }
 
     .switch-btn-r {
-        position: relative; left: calc(85% - 7em);
+        position: relative; left: calc(98% - 7em);
     }
 
     .detailed-info .legend-box .legend-1 {

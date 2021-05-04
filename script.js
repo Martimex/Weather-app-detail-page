@@ -111,9 +111,16 @@ function last() {
             })
     }
 
-    const mediaQueryList = window.matchMedia('(max-width: 900px)');  // condition for mobile devices 
+    const mediaQueryList = window.matchMedia('(max-width: 900px) and (orientation: landscape)');  // condition for mobile devices 
 
     if(mediaQueryList.matches) {
+
+        // FOR ANIMATION PURPOSES
+        const grid = document.querySelector(`.grid-container`);
+        let dateBoxes = grid.querySelectorAll(`.date`); 
+        let visualBoxes = grid.querySelectorAll(`.visual`);
+        let temperBoxes = grid.querySelectorAll(`.temper`);
+        /////////////////////////////////////////////////////////////////////////////
 
         // Get every textContent of legend box in order to shorten unnecessary text
         document.querySelectorAll(`.legend-box .legend-1`).forEach(box => {
@@ -141,12 +148,121 @@ function last() {
 
         parentElem.insertBefore(nextBtn, gridCont);
 
-        document.querySelector('.switch-btn-l');
+        let firstBtn = document.querySelector(`.switch-btn-l`);
+        firstBtn.style.display = 'none';
+
         let secBtn = document.querySelector('.switch-btn-r');
         secBtn.addEventListener('touchend', (e) => {
-            //console.log('Kacperek kliknął');
-            //let secondHalfQuery = document.querySelectorAll('')
+            console.log('Kacperek kliknął');
+            
+            /* It has to get query results from second half of query and display it in the box - so we need do a swapping here*/
+            for(let f=0; f<5; f++) {
+
+                let temporaryDiv = document.querySelector(`.footer .mobile-temporary-content`);
+
+                /* DATE */
+
+                let secondHalfQuery = document.querySelector(`.grid-container .date:nth-of-type(${(limit/2)+f+1})`); // 5, 6, 7, 8, 9, 10th elem
+                let oldElem = document.querySelector(`.grid-container .date:nth-of-type(${f+1})`); // 1, 2, 3, 4, 5th elem
+
+                temporaryDiv.textContent = oldElem.textContent; // we have stored old values in temporary div
+                oldElem.textContent = secondHalfQuery.textContent; // we have changed old value to a new one
+                secondHalfQuery.textContent = temporaryDiv.textContent; // so we complete the swap
+
+                temporaryDiv.textContent = '';
+
+                /* TEMPERATURE */
+
+                let tempHalfQuery = document.querySelector(`.grid-container .temper:nth-of-type(${(limit/2)+f+1})`);
+                let oldTemp = document.querySelector(`.grid-container .temper:nth-of-type(${f+1})`);
+
+                temporaryDiv.textContent = oldTemp.textContent;
+                oldTemp.textContent = tempHalfQuery.textContent;
+                tempHalfQuery.textContent = temporaryDiv.textContent;
+
+                temporaryDiv.textContent = ''; 
+
+                /* VISUALS */
+
+                const gridCont = document.querySelector(`.grid-container`);
+                let visHalfQuery = gridCont.querySelector(`.visual:nth-of-type(${(limit/2)+f+1})`); // new
+                let oldVisual = gridCont.querySelector(`.visual:nth-of-type(${f+1})`); // old
+                
+                gridCont.insertBefore(visHalfQuery, oldVisual);
+            }
+
+            onClickAnime();
+            /* Hide this button; make the other one visible */
+            secBtn.style.display = 'none';
+            firstBtn.style.display = 'block';
         })
+
+        firstBtn.addEventListener('touchend', (e) => {
+            console.log('Piotruś kliknął');
+
+            for(let f=0; f<5; f++) {
+
+                let temporaryDiv = document.querySelector(`.footer .mobile-temporary-content`);
+
+                /* DATE */
+
+                let firstHalfQuery = document.querySelector(`.grid-container .date:nth-of-type(${(limit/2)+f+1})`); // 5, 6, 7, 8, 9, 10th elem
+                let oldElem = document.querySelector(`.grid-container .date:nth-of-type(${f+1}`); // 1, 2, 3, 4, 5th elem
+
+                temporaryDiv.textContent = oldElem.textContent; // we have stored old values in temporary div
+                oldElem.textContent = firstHalfQuery.textContent; // we have changed old value to a new one
+                firstHalfQuery.textContent = temporaryDiv.textContent; // so we complete the swap
+
+                temporaryDiv.textContent = '';
+
+                /* TEMPERATURE */
+
+                let tempHalfQuery = document.querySelector(`.grid-container .temper:nth-of-type(${(limit/2)+f+1})`);
+                let oldTemp = document.querySelector(`.grid-container .temper:nth-of-type(${f+1})`);
+
+                temporaryDiv.textContent = oldTemp.textContent;
+                oldTemp.textContent = tempHalfQuery.textContent;
+                tempHalfQuery.textContent = temporaryDiv.textContent;
+
+                temporaryDiv.textContent = '';
+                
+                /* VISUALS */
+                
+                const gridCont = document.querySelector(`.grid-container`);
+                let visHalfQuery = gridCont.querySelector(`.visual:nth-of-type(${(limit/2)+f+1})`); // new
+                let oldVisual = gridCont.querySelector(`.visual:nth-of-type(${f+1})`); // old
+
+                gridCont.insertBefore(visHalfQuery, oldVisual);
+                
+            }
+
+            onClickAnime();
+            /* Hide this button; make the other one visible */
+            firstBtn.style.display = 'none';
+            secBtn.style.display = 'block';
+        })
+
+        function onClickAnime() {
+
+            anime({
+                targets: dateBoxes,
+                opacity: [0, 1],
+                delay: anime.stagger(120),
+            }) 
+
+            anime({
+                targets: visualBoxes,
+                opacity: [0, 1],
+                delay: anime.stagger(120),
+            })
+
+            anime({
+                targets: temperBoxes,
+                opacity: [0, 1],
+                delay: anime.stagger(120),
+            })
+
+        }
     }
 
     // Display queried city name on the upper span

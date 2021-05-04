@@ -30,7 +30,7 @@ function showGraph(date, visual, temper) {
     let secTemperHalf = arrT.splice(0, 5);
 
     anime({   //DON'T REMOVE THIS - for some reason opacity is not applied to all elems, this fixes the issue, so that animation look well
-        targets: [secDateHalf, secVisualHalf],
+        targets: [secDateHalf, secVisualHalf, secTemperHalf],
         duration: 900,
         opacity: [0],
     })
