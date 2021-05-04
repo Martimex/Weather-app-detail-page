@@ -189,10 +189,28 @@
 
 @media screen and (orientation: landscape) and (max-width: 900px) /* screen-reverse state */
 {
+
+    .city-name{
+        margin: .3em;
+    }
+
     .grid-container{
-        grid-template-rows: [date]4fr [vis]20fr [temp]4fr;
+        grid-template-rows: [date]4fr [vis]8fr [temp]4fr;
         grid-template-columns: [A] 19vw [B] 19vw [C] 19vw [D] 19vw [E] 19vw [F] 19vw [G] 19vw [H] 19vw [I] 19vw [J] 19vw;
         margin: 0 0 0 2em;
+    }
+
+    .grid-container .visual div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: .3em;
+        margin: 0 .8em;
+        border-radius: 4.2px;
+    }
+
+    .grid-container .temper {
+        padding: .4em .6em;
     }
 
     /* .grid-container {
