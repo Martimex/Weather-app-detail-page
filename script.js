@@ -8,6 +8,7 @@ let isFirstBlockDay; // is the first block representing day?
 
 const mediaQueryList = window.matchMedia('(max-width: 900px) and (orientation: landscape)');  // condition for mobile devices - horizontal screen
 const mediaQueryPortrait = window.matchMedia(`(max-height: 900px) and (orientation: portrait)`); // for vertical screens
+const mediaQueryPortraitHugeScreens = window.matchMedia(`(min-height: 900px) and (orientation: portrait)`) // for huge vertical screens
 
 // trzeba 10 razy fetch'ować dane
 
@@ -118,7 +119,7 @@ function last() {
     }
 
 
-    if((mediaQueryList.matches) || (mediaQueryPortrait.matches)) { // jeżeli mamy do czynienia z telefonem
+    if((mediaQueryList.matches) || (mediaQueryPortrait.matches) || (mediaQueryPortraitHugeScreens)) { // jeżeli mamy do czynienia z telefonem
 
         // FOR ANIMATION PURPOSES
         const grid = document.querySelector(`.grid-container`);
@@ -282,8 +283,6 @@ function last() {
             }
         })
 
-        let grid = document.querySelector(`.grid-container`);
-        console.log(grid.querySelector(`.date`).innerText);
         /* shortenDate.forEach(function(date) {
             
             console.log(date);

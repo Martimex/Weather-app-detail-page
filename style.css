@@ -290,11 +290,6 @@
         font-size: 1.4rem;
         margin-bottom: .4em;
         padding: .4em;
-        border: .1rem solid #000;
-        background: rgba(255,255,255, 0.1);
-        border-top: .2rem solid rgba(255, 255, 255, 0.5);
-        border-left: .2rem solid rgba(255, 255, 255, 0.5);
-        box-shadow: .5rem .5rem .8rem rgba(0, 0, 0, 0.5);
     }
 
     .detailed-info .detail-box {
@@ -347,6 +342,28 @@
         grid-template-rows: [date]14% [vis]20% [temp]14%; 
         grid-template-columns: [A] 20vw [B] 20vw [C] 20vw [D] 20vw [E] 20vw [F] 20vw [G] 20vw [H] 20vw [I] 20vw [J] 20vw;
         margin: 0 0 0 0;
+    }
+
+    .detailed-info .detail-box, .legend-box {
+        padding:  0 2.2em;
+        row-gap: 1.3em;
+        font-size: 1.25em;
+    }
+
+
+    .switch-btn-l, .switch-btn-r {
+        width: 7em;
+        height: 3em;
+        position: relative; left: 2%;
+        /* Button styling */
+        border-radius: 7px;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        background-color: rgb(219, 172, 84);
+    }
+
+    .switch-btn-r {
+        position: relative; left: calc(98% - 7em);
     }
 
 }
