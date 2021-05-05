@@ -6,6 +6,9 @@ let limit = 10;
 
 let isFirstBlockDay; // is the first block representing day?
 
+const mediaQueryList = window.matchMedia('(max-width: 900px) and (orientation: landscape)');  // condition for mobile devices - horizontal screen
+const mediaQueryPortrait = window.matchMedia(`(max-height: 900px) and (orientation: portrait)`); // for vertical screens
+
 // trzeba 10 razy fetch'ować dane
 
 function first() {
@@ -57,6 +60,9 @@ function last() {
             .then((data) => {
                 
                 let fullDate = data.list[(iter*4)+1].dt_txt;
+                if(mediaQueryPortrait.matches) {
+                    fullDate = fullDate.substring(5, 16);
+                }
 
                 // For first operation in the loop
                 dayOrNight(fullDate, iter);
@@ -111,9 +117,8 @@ function last() {
             })
     }
 
-    const mediaQueryList = window.matchMedia('(max-width: 900px) and (orientation: landscape)');  // condition for mobile devices 
 
-    if(mediaQueryList.matches) {
+    if((mediaQueryList.matches) || (mediaQueryPortrait.matches)) { // jeżeli mamy do czynienia z telefonem
 
         // FOR ANIMATION PURPOSES
         const grid = document.querySelector(`.grid-container`);
@@ -265,6 +270,32 @@ function last() {
         }
     }
 
+    if(mediaQueryPortrait.matches) {
+
+         // Get every textContent of legend box in order to shorten unnecessary text
+         document.querySelectorAll(`.legend-box .legend-1`).forEach(box => {
+            let limit = 5; //
+            if(box.textContent.length > limit) {
+                let text = box.textContent;
+                let non = text.substr(0, limit);
+                box.textContent = non + '...';
+            }
+        })
+
+        let grid = document.querySelector(`.grid-container`);
+        console.log(grid.querySelector(`.date`).innerText);
+        /* shortenDate.forEach(function(date) {
+            
+            console.log(date);
+            console.log(date.innerText);
+               
+            let text = date.innerText;
+            let newText = text.substring(0, 16);
+            console.log(`%c ${newText}`, 'color: red; background: gray;');
+            text = newText; 
+        }); */
+
+    }
     // Display queried city name on the upper span
 
     let citySpan = document.querySelector('.city-name');
@@ -353,6 +384,7 @@ function lastDetailed() {
             .then((details) => {
 
                 let fullDate = details.list[(iter*4)+1].dt_txt;
+
                 //console.log('fullDate: '+fullDate);
 
                 let iconCode = details.list[(iter*4)+1].weather[0].icon;
@@ -623,7 +655,10 @@ let iterAnime = 0;
 const footer = document.querySelector(`.footer`);
 let once = 0;
 
+
+
 window.onscroll = function() {keepItTop(legendGrid, handler, catched); footerAnimate(footer);}
+
 
 function keepItTop (legendGrid) {
 
